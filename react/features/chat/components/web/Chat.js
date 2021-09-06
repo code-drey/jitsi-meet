@@ -103,7 +103,7 @@ class Chat extends AbstractChat<Props> {
     render() {
         return (
             <>
-                { this._renderPanelContent() }
+                {this._renderPanelContent()}
             </>
         );
     }
@@ -133,8 +133,18 @@ class Chat extends AbstractChat<Props> {
         if (this.props._isPollsTabFocused) {
             return (
                 <>
-                    { this.props._isPollsEnabled && this._renderTabs()}
+                    {this.props._isPollsEnabled && this._renderTabs()}
                     <PollsPane />
+                    <KeyboardAvoider />
+                </>
+            );
+        }
+
+        if (this.props._isExamTabFocused) {
+            return (
+                <>
+                    {this.props._isExamEnabled && this._renderTabs()}
+                    <ExamPane />
                     <KeyboardAvoider />
                 </>
             );
@@ -143,15 +153,16 @@ class Chat extends AbstractChat<Props> {
         return (
             <>
                 {this.props._isPollsEnabled && this._renderTabs()}
-                <TouchmoveHack isModal = { this.props._isModal }>
+                {this.props._isExamEnabled && this._renderTabs()}
+                <TouchmoveHack isModal={this.props._isModal}>
                     <MessageContainer
-                        messages = { this.props._messages }
-                        ref = { this._messageContainerRef } />
+                        messages={this.props._messages}
+                        ref={this._messageContainerRef} />
                 </TouchmoveHack>
                 <MessageRecipient />
                 <ChatInput
-                    onResize = { this._onChatInputResize }
-                    onSend = { this._onSendMessage } />
+                    onResize={this._onChatInputResize}
+                    onSend={this._onSendMessage} />
                 <KeyboardAvoider />
             </>
         );
@@ -166,36 +177,48 @@ class Chat extends AbstractChat<Props> {
     _renderTabs() {
 
         return (
-            <div className = { 'chat-tabs-container' }>
+            <div className={'chat-tabs-container'}>
                 <div
-                    className = { `chat-tab ${
-                        this.props._isPollsTabFocused ? '' : 'chat-tab-focus'
-                    }` }
-                    onClick = { this._onToggleChatTab }>
-                    <span className = { 'chat-tab-title' }>
+                    className={`chat-tab ${this.props._isPollsTabFocused ? '' : 'chat-tab-focus'
+                        }`}
+                    onClick={this._onToggleChatTab}>
+                    <span className={'chat-tab-title'}>
                         {this.props.t('chat.tabs.chat')}
                     </span>
                     {this.props._isPollsTabFocused
                         && this.props._nbUnreadMessages > 0 && (
-                        <span className = { 'chat-tab-badge' }>
-                            {this.props._nbUnreadMessages}
-                        </span>
-                    )}
+                            <span className={'chat-tab-badge'}>
+                                {this.props._nbUnreadMessages}
+                            </span>
+                        )}
                 </div>
                 <div
-                    className = { `chat-tab ${
-                        this.props._isPollsTabFocused ? 'chat-tab-focus' : ''
-                    }` }
-                    onClick = { this._onTogglePollsTab }>
-                    <span className = { 'chat-tab-title' }>
+                    className={`chat-tab ${this.props._isPollsTabFocused ? 'chat-tab-focus' : ''
+                        }`}
+                    onClick={this._onTogglePollsTab}>
+                    <span className={'chat-tab-title'}>
                         {this.props.t('chat.tabs.polls')}
                     </span>
                     {!this.props._isPollsTabFocused
                         && this.props._nbUnreadPolls > 0 && (
-                        <span className = { 'chat-tab-badge' }>
-                            {this.props._nbUnreadPolls}
-                        </span>
-                    )}
+                            <span className={'chat-tab-badge'}>
+                                {this.props._nbUnreadPolls}
+                            </span>
+                        )}
+                </div>
+                <div
+                    className={`chat-tab ${this.props._isExamTabFocused ? 'chat-tab-focus' : ''
+                        }`}
+                    onClick={this._onToggleExamTab}>
+                    <span className={'chat-tab-title'}>
+                        {this.props.t('chat.tabs.exam')}
+                    </span>
+                    {/* {!this.props._isExamTabFocused
+                        && this.props._nbUnreadPolls > 0 && (
+                            <span className={'chat-tab-badge'}>
+                                {this.props._nbUnreadPolls}
+                            </span>
+                        )} */}
                 </div>
             </div>
         );
@@ -211,9 +234,9 @@ class Chat extends AbstractChat<Props> {
     _renderChatHeader() {
         return (
             <Header
-                className = 'chat-header'
-                id = 'chat-header'
-                onCancel = { this._onToggleChat } />
+                className='chat-header'
+                id='chat-header'
+                onCancel={this._onToggleChat} />
         );
     }
 
@@ -233,14 +256,14 @@ class Chat extends AbstractChat<Props> {
             if (_isModal) {
                 ComponentToRender = (
                     <ChatDialog>
-                        { _showNamePrompt ? <DisplayNameForm /> : this._renderChat() }
+                        {_showNamePrompt ? <DisplayNameForm /> : this._renderChat()}
                     </ChatDialog>
                 );
             } else {
                 ComponentToRender = (
                     <>
-                        { this._renderChatHeader() }
-                        { _showNamePrompt ? <DisplayNameForm /> : this._renderChat() }
+                        {this._renderChatHeader()}
+                        {_showNamePrompt ? <DisplayNameForm /> : this._renderChat()}
                     </>
                 );
             }
@@ -255,11 +278,11 @@ class Chat extends AbstractChat<Props> {
 
         return (
             <div
-                aria-haspopup = 'true'
-                className = { `sideToolbarContainer ${className}` }
-                id = 'sideToolbarContainer'
-                onKeyDown = { this._onEscClick } >
-                { ComponentToRender }
+                aria-haspopup='true'
+                className={`sideToolbarContainer ${className}`}
+                id='sideToolbarContainer'
+                onKeyDown={this._onEscClick} >
+                {ComponentToRender}
             </div>
         );
     }
@@ -292,6 +315,7 @@ class Chat extends AbstractChat<Props> {
     }
     _onTogglePollsTab: () => void;
     _onToggleChatTab: () => void;
+    _onToggleExamTab: () => void;
 
 }
 

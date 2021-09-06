@@ -4,7 +4,7 @@ import { Component } from 'react';
 import type { Dispatch } from 'redux';
 
 import { getLocalParticipant } from '../../base/participants';
-import { sendMessage, setIsPollsTabFocused } from '../actions';
+import { sendMessage, setIsPollsTabFocused, setIsExamTabFocused } from '../actions';
 import { SMALL_WIDTH_THRESHOLD } from '../constants';
 
 /**
@@ -33,6 +33,16 @@ export type Props = {
     _isPollsTabFocused: boolean,
 
     /**
+    * True if the exam feature is enabled.
+    */
+    _isExamEnabled: boolean,
+
+    /**
+     * Whether the exam tab is focused or not.
+     */
+    _isExamTabFocused: boolean,
+
+    /**
      * All the chat messages in the conference.
      */
     _messages: Array<Object>,
@@ -46,6 +56,11 @@ export type Props = {
      * Number of unread poll messages.
      */
     _nbUnreadPolls: number,
+
+    /**
+    * Number of unread exam messages.
+    */
+    _nbUnreadExam: number,
 
     /**
      * Function to send a text message.
@@ -67,6 +82,13 @@ export type Props = {
      * @protected
      */
     _onTogglePollsTab: Function,
+
+    /**
+    * Function to display the exam tab.
+    *
+    * @protected
+    */
+    _onToggleExamTab: Function,
 
     /**
      * Function to toggle the chat window.
@@ -107,6 +129,7 @@ export default class AbstractChat<P: Props> extends Component<P> {
         this._onSendMessage = this._onSendMessage.bind(this);
         this._onToggleChatTab = this._onToggleChatTab.bind(this);
         this._onTogglePollsTab = this._onTogglePollsTab.bind(this);
+        this._onToggleExamTab = this._onToggleExamTab.bind(this);
     }
 
     _onSendMessage: (string) => void;
@@ -146,6 +169,17 @@ export default class AbstractChat<P: Props> extends Component<P> {
     _onTogglePollsTab() {
         this.props.dispatch(setIsPollsTabFocused(true));
     }
+
+    _onToggleExamTab: () => void;
+    /**
+     * Display the Exam tab.
+     *
+     * @private
+     * @returns {void}
+     */
+    _onToggleExamTab() {
+        this.props.dispatch(setIsExamTabFocused(true));
+    }
 }
 
 /**
@@ -161,19 +195,24 @@ export default class AbstractChat<P: Props> extends Component<P> {
  * }}
  */
 export function _mapStateToProps(state: Object) {
-    const { isOpen, isPollsTabFocused, messages, nbUnreadMessages } = state['features/chat'];
+    const { isOpen, isPollsTabFocused, isExamTabFocused, messages, nbUnreadMessages } = state['features/chat'];
     const { nbUnreadPolls } = state['features/polls'];
+    //const { nbUnreadExam } = state['features/exam']; //TODO
     const _localParticipant = getLocalParticipant(state);
     const { disablePolls } = state['features/base/config'];
+    //const { disableExam } = state['features/base/config']; //TODO
 
     return {
         _isModal: window.innerWidth <= SMALL_WIDTH_THRESHOLD,
         _isOpen: isOpen,
         _isPollsEnabled: !disablePolls,
         _isPollsTabFocused: isPollsTabFocused,
+        //_isExamEnabled: !disableExam, //TODO
+        _isExamTabFocused: isExamTabFocused,
         _messages: messages,
         _nbUnreadMessages: nbUnreadMessages,
         _nbUnreadPolls: nbUnreadPolls,
+        //_nbUnreadExam: nbUnreadExam,
         _showNamePrompt: !_localParticipant?.name
     };
 }
