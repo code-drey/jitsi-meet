@@ -4,6 +4,7 @@ import React from 'react';
 
 import { translate } from '../../../base/i18n';
 import { connect } from '../../../base/redux';
+import { ExamPane } from '../../../exam/components';
 import { PollsPane } from '../../../polls/components';
 import { toggleChat } from '../../actions.web';
 import AbstractChat, {
@@ -78,6 +79,7 @@ class Chat extends AbstractChat<Props> {
             this._scrollMessageContainerToBottom(false);
         }
     }
+
     _onEscClick: (KeyboardEvent) => void;
 
     /**
@@ -103,7 +105,7 @@ class Chat extends AbstractChat<Props> {
     render() {
         return (
             <>
-                { this._renderPanelContent() }
+                {this._renderPanelContent()}
             </>
         );
     }
@@ -133,8 +135,18 @@ class Chat extends AbstractChat<Props> {
         if (this.props._isPollsTabFocused) {
             return (
                 <>
-                    { this.props._isPollsEnabled && this._renderTabs()}
+                    {this.props._isPollsEnabled && this._renderTabs()}
                     <PollsPane />
+                    <KeyboardAvoider />
+                </>
+            );
+        }
+
+        if (this.props._isExamTabFocused) {
+            return (
+                <>
+                    {this.props._isExamEnabled && this._renderTabs()}
+                    <ExamPane />
                     <KeyboardAvoider />
                 </>
             );
@@ -143,6 +155,7 @@ class Chat extends AbstractChat<Props> {
         return (
             <>
                 {this.props._isPollsEnabled && this._renderTabs()}
+                {this.props._isExamEnabled && this._renderTabs()}
                 <TouchmoveHack isModal = { this.props._isModal }>
                     <MessageContainer
                         messages = { this.props._messages }
@@ -168,34 +181,46 @@ class Chat extends AbstractChat<Props> {
         return (
             <div className = { 'chat-tabs-container' }>
                 <div
-                    className = { `chat-tab ${
-                        this.props._isPollsTabFocused ? '' : 'chat-tab-focus'
+                    className = { `chat-tab ${this.props._isPollsTabFocused ? '' : 'chat-tab-focus'
                     }` }
                     onClick = { this._onToggleChatTab }>
                     <span className = { 'chat-tab-title' }>
                         {this.props.t('chat.tabs.chat')}
                     </span>
                     {this.props._isPollsTabFocused
-                        && this.props._nbUnreadMessages > 0 && (
+                    && this.props._nbUnreadMessages > 0 && (
                         <span className = { 'chat-tab-badge' }>
                             {this.props._nbUnreadMessages}
                         </span>
                     )}
                 </div>
                 <div
-                    className = { `chat-tab ${
-                        this.props._isPollsTabFocused ? 'chat-tab-focus' : ''
+                    className = { `chat-tab ${this.props._isPollsTabFocused ? 'chat-tab-focus' : ''
                     }` }
                     onClick = { this._onTogglePollsTab }>
                     <span className = { 'chat-tab-title' }>
                         {this.props.t('chat.tabs.polls')}
                     </span>
                     {!this.props._isPollsTabFocused
-                        && this.props._nbUnreadPolls > 0 && (
+                    && this.props._nbUnreadPolls > 0 && (
                         <span className = { 'chat-tab-badge' }>
                             {this.props._nbUnreadPolls}
                         </span>
                     )}
+                </div>
+                <div
+                    className = { `chat-tab ${this.props._isExamTabFocused ? 'chat-tab-focus' : ''
+                    }` }
+                    onClick = { this._onToggleExamTab }>
+                    <span className = { 'chat-tab-title' }>
+                        {this.props.t('chat.tabs.exam')}
+                    </span>
+                    {/* {!this.props._isExamTabFocused
+                        && this.props._nbUnreadPolls > 0 && (
+                            <span className={'chat-tab-badge'}>
+                                {this.props._nbUnreadPolls}
+                            </span>
+                        )} */}
                 </div>
             </div>
         );
@@ -233,14 +258,16 @@ class Chat extends AbstractChat<Props> {
             if (_isModal) {
                 ComponentToRender = (
                     <ChatDialog>
-                        { _showNamePrompt ? <DisplayNameForm /> : this._renderChat() }
+                        {_showNamePrompt
+                            ? <DisplayNameForm /> : this._renderChat()}
                     </ChatDialog>
                 );
             } else {
                 ComponentToRender = (
                     <>
-                        { this._renderChatHeader() }
-                        { _showNamePrompt ? <DisplayNameForm /> : this._renderChat() }
+                        {this._renderChatHeader()}
+                        {_showNamePrompt
+                            ? <DisplayNameForm /> : this._renderChat()}
                     </>
                 );
             }
@@ -258,8 +285,8 @@ class Chat extends AbstractChat<Props> {
                 aria-haspopup = 'true'
                 className = { `sideToolbarContainer ${className}` }
                 id = 'sideToolbarContainer'
-                onKeyDown = { this._onEscClick } >
-                { ComponentToRender }
+                onKeyDown = { this._onEscClick }>
+                {ComponentToRender}
             </div>
         );
     }
@@ -283,15 +310,17 @@ class Chat extends AbstractChat<Props> {
     _onToggleChat: () => void;
 
     /**
-    * Toggles the chat window.
-    *
-    * @returns {Function}
-    */
+     * Toggles the chat window.
+     *
+     * @returns {Function}
+     */
     _onToggleChat() {
         this.props.dispatch(toggleChat());
     }
+
     _onTogglePollsTab: () => void;
     _onToggleChatTab: () => void;
+    _onToggleExamTab: () => void;
 
 }
 

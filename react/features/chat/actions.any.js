@@ -6,7 +6,8 @@ import {
     CLOSE_CHAT,
     SEND_MESSAGE,
     SET_PRIVATE_MESSAGE_RECIPIENT,
-    SET_IS_POLL_TAB_FOCUSED
+    SET_IS_POLL_TAB_FOCUSED,
+    SET_IS_EXAM_TAB_FOCUSED
 } from './actionTypes';
 
 /**
@@ -109,5 +110,18 @@ export function setIsPollsTabFocused(isPollsTabFocused: boolean) {
     return {
         isPollsTabFocused,
         type: SET_IS_POLL_TAB_FOCUSED
+    };
+}
+
+/**
+ * Set the value of _isExamTabFocused.
+ *
+ * @param {boolean} _isExamTabFocused - The new value for _isExamTabFocused.
+ * @returns {Function}
+ */
+export function setIsExamTabFocused(isExamTabFocused: boolean) {
+    return {
+        isExamTabFocused,
+        type: SET_IS_EXAM_TAB_FOCUSED
     };
 }

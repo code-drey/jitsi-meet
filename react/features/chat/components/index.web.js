@@ -1,4 +1,4 @@
-// @flow
+// @flowHOCHOC
 
 export * from './web';
 

@@ -74,3 +74,13 @@ export const SET_PRIVATE_MESSAGE_RECIPIENT = 'SET_PRIVATE_MESSAGE_RECIPIENT';
  * }
  */
 export const SET_IS_POLL_TAB_FOCUSED = 'SET_IS_POLL_TAB_FOCUSED';
+
+/**
+ * The type of action which signals the update a _isExamTabFocused.
+ *
+ * {
+ *     isExamTabFocused: boolean,
+ *     type: SET_IS_EXAM_TAB_FOCUSED
+ * }
+ */
+export const SET_IS_EXAM_TAB_FOCUSED = 'SET_IS_EXAM_TAB_FOCUSED';
