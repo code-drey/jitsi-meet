@@ -2,26 +2,30 @@
 // @flow
 
 import React from 'react';
-import { View } from 'react-native';
-import { Button } from 'react-native-paper';
 
-import { BUTTON_MODES } from '../../../chat/constants';
+import PollCreate from '../../../polls/components/web/PollCreate';
 import AbstractExamPane from '../AbstractExamPane';
 import type { AbstractProps } from '../AbstractExamPane';
 
-import PollCreate from './PollCreate';
-import PollsList from './PollsList';
-import { chatStyles } from './styles';
 
 const ExamPane = (props: AbstractProps) => {
 
     const { createMode, onCreate, setCreateMode, t } = props;
 
-    return (
-        <View style={chatStyles.PollPane}>
-            <h1>TEST</h1>
-        </View>
-    );
+    return createMode
+        ? <PollCreate setCreateMode = { setCreateMode } />
+        : <div className = 'polls-pane-content'>
+            <div className = { 'poll-container' } />
+            <div className = { 'poll-footer' }>
+                <button
+                    aria-label = { t('polls.create.create') }
+                    className = { 'poll-primary-button' }
+                    // eslint-disable-next-line react/jsx-no-bind
+                    onClick = { onCreate } >
+                    <span>{t('polls.create.create')}</span>
+                </button>
+            </div>
+        </div>;
 };
 
 

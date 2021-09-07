@@ -200,14 +200,14 @@ export function _mapStateToProps(state: Object) {
     //const { nbUnreadExam } = state['features/exam']; //TODO
     const _localParticipant = getLocalParticipant(state);
     const { disablePolls } = state['features/base/config'];
-    //const { disableExam } = state['features/base/config']; //TODO
+    //const { disableExam } = state['features/base/config']; //TODO notwendig?
 
     return {
         _isModal: window.innerWidth <= SMALL_WIDTH_THRESHOLD,
         _isOpen: isOpen,
         _isPollsEnabled: !disablePolls,
         _isPollsTabFocused: isPollsTabFocused,
-        //_isExamEnabled: !disableExam, //TODO
+        //_isExamEnabled: !disableExam, //TODO notwenidg?
         _isExamTabFocused: isExamTabFocused,
         _messages: messages,
         _nbUnreadMessages: nbUnreadMessages,
