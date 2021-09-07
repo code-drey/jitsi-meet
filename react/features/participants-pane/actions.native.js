@@ -1,10 +1,13 @@
 // @flow
 
 import { openDialog } from '../base/dialog';
+import { SharedVideoMenu } from '../video-menu';
+import ConnectionStatusComponent
+    from '../video-menu/components/native/ConnectionStatusComponent';
+import RemoteVideoMenu from '../video-menu/components/native/RemoteVideoMenu';
 
 import { SET_VOLUME } from './actionTypes';
 import {
-    ContextMenuMeetingParticipantDetails,
     ContextMenuLobbyParticipantReject
 } from './components/native';
 export * from './actions.any';
@@ -21,13 +24,33 @@ export function showContextMenuReject(participant: Object) {
 
 
 /**
- * Displays the context menu for the selected meeting participant.
+ * Displays the connection status for the local meeting participant.
  *
  * @param {string} participantID - The selected meeting participant id.
  * @returns {Function}
  */
-export function showContextMenuDetails(participantID: String) {
-    return openDialog(ContextMenuMeetingParticipantDetails, { participantID });
+export function showConnectionStatus(participantID: string) {
+    return openDialog(ConnectionStatusComponent, { participantID });
+}
+
+/**
+ * Displays the context menu for the selected meeting participant.
+ *
+ * @param {string} participantId - The ID of the selected meeting participant.
+ * @returns {Function}
+ */
+export function showContextMenuDetails(participantId: string) {
+    return openDialog(RemoteVideoMenu, { participantId });
+}
+
+/**
+ * Displays the shared video menu.
+ *
+ * @param {string} participantId - The ID of the selected meeting participant.
+ * @returns {Function}
+ */
+export function showSharedVideoMenu(participantId: string) {
+    return openDialog(SharedVideoMenu, { participantId });
 }
 
 /**
